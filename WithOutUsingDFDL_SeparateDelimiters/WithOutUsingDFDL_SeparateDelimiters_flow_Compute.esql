@@ -1,0 +1,35 @@
+
+
+CREATE COMPUTE MODULE WithOutUsingDFDL_SeparateDelimiters_flow_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		
+		DECLARE inref REFERENCE TO InputBody;
+		DECLARE ccsid INTEGER InputRoot.Properties.CodedCharSetId;
+		DECLARE encoding INTEGER InputRoot.Properties.Encoding;
+		DECLARE inrefchar CHARACTER CAST (ASBITSTREAM(inref CCSID ccsid)AS CHARACTER CCSID ccsid ENCODING encoding);
+		-- inrefchar = 814|RATHOD|HYDERABAD
+		DECLARE i INTEGER 1;
+		DECLARE k,j ,p INTEGER 0;
+		DECLARE f1,VAR CHARACTER;
+		WHILE i<7 DO
+		
+		SET p= POSITION('|'IN inrefchar REPEAT i );
+		SET k=p;
+		SET p=p-j;
+		SET f1 = SUBSTRING(inrefchar FROM j FOR p);
+		SET OutputRoot.XMLNSC.Record.field[i]=f1;
+			SET j=k+1;
+			SET i= i+1;		
+		END WHILE;
+		SET p= POSITION('|'IN inrefchar REPEAT i-1 );
+		SET f1 = SUBSTRING(inrefchar FROM p+1);
+		SET OutputRoot.XMLNSC.Record.field[i]=f1;
+
+--   	SET OutputLocalEnvironment.Destination.File.Name = ref.Emp_id||'_'||ref.Emp_name||'.txt';
+	--	SET OutputRoot.XMLNSC.Request=f1;
+		
+		RETURN TRUE;
+	END;
+END MODULE;
