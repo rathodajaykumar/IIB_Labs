@@ -1,0 +1,18 @@
+
+DECLARE valueUDP EXTERNAL CHARACTER '';
+
+CREATE COMPUTE MODULE test_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+	 SET OutputRoot = InputRoot;
+		SET Environment.Destination.GroupScatter.Context = InputLocalEnvironment.Destination;
+		SET Environment.Varibale.testWhetherPassing = 'Yes';
+		SET OutputRoot.HTTPInputHeader = NULL;
+		PROPAGATE TO TERMINAL 'out';
+		PROPAGATE TO TERMINAL 'out1';
+		
+		RETURN FALSE;
+	END;
+
+
+END MODULE;

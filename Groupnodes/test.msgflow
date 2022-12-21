@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmCallableFlowAsyncInvoke.msgnode="ComIbmCallableFlowAsyncInvoke.msgnode" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmGroupScatter.msgnode="ComIbmGroupScatter.msgnode" xmlns:ComIbmWSInput.msgnode="ComIbmWSInput.msgnode" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="test.msgflow" nsPrefix="test.msgflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1" nodeLayoutStyle="RECTANGLE">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.valueUDP" name="valueUDP" defaultValueLiteral="chandrakanth">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <translation xmi:type="utility:TranslatableString" key="test" bundleName="test" pluginId="Test"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Test/icons/full/obj16/test.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Test/icons/full/obj30/test.gif"/>
+    <composition>
+      <nodes xmi:type="ComIbmWSInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="32,104" URLSpecifier="/group">
+        <translation xmi:type="utility:ConstantString" string="HTTP Input"/>
+      </nodes>
+      <nodes xmi:type="ComIbmGroupScatter.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="201,99" GroupName="GroupName" GroupTimeout="5.0">
+        <translation xmi:type="utility:ConstantString" string="Group Scatter"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_3" location="419,101" computeExpression="esql://routine/#test_Compute.Main" computeMode="all">
+        <translation xmi:type="utility:ConstantString" string="Compute"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCallableFlowAsyncInvoke.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_4" location="720,16" asyncResponseCorrelator="Student" targetApplication="Test" targetEndpointName="EndPointName1" AddRequestToGroup="true" GroupRequestFolderName="Student" GroupRequestTimeout="30.0">
+        <translation xmi:type="utility:ConstantString" string="Callable Flow Async Invoke"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCallableFlowAsyncInvoke.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_6" location="772,144" asyncResponseCorrelator="Parent" targetApplication="Test" targetEndpointName="EndPointName2" AddRequestToGroup="true" GroupRequestFolderName="Parent" GroupRequestTimeout="30.0">
+        <translation xmi:type="utility:ConstantString" string="Callable Flow Async Invoke1"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_2" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_2" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_2" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_3" targetNode="FCMComposite_1_4" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_5" targetNode="FCMComposite_1_6" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.out1" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer>
+      <propertyDescriptor groupName="Group.Basic" configurable="true" userDefined="true" describedAttribute="Property.valueUDP">
+        <propertyName xmi:type="utility:TranslatableString" key="Property.valueUDP" bundleName="test" pluginId="Test"/>
+      </propertyDescriptor>
+    </propertyOrganizer>
+    <stickyBoard>
+      <stickyNote location="947,208">
+        <body xmi:type="utility:ConstantString" string="CallableAsyncInvokeNode will invoke CallableInputNode first and completes&#xA; the result with the callableReplyNode And gives the resultSet to&#xA;the CallableAsynResponseNode."/>
+      </stickyNote>
+      <stickyNote location="53,237">
+        <body xmi:type="utility:ConstantString" string="1. In this flow we will receive the lengthy request First.&#xA;2. GroupScatterNode generates properties in LocalEnvironment and then we can split &#xA;the incoming message and send it to the multiple backends and can retrieve them &#xA;exactly with the below GroupId.&#xA;GroupScatter&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;    GroupId:BLOB:[B@1d5ff70d  -> 010000000000000004000000000000000000000000000000&#xA;&#xA;3. We will concate the responses of CallableAsyncResp with the help of GroupGather and GroupCompleteNodes.&#xA;   Message&#xD;&#xA;      &#x9;ComIbmGroupCompleteNode&#xD;&#xA;         &#x9;&#x9;&#x9;Group&#xD;&#xA;             &#x9;&#x9;&#x9;&#x9;&#x9;GroupProperties&#xD;&#xA;                   &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;GroupId:CHARACTER:010000000000000004000000000000000000000000000000&#xD;&#xA;                   &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;GroupStatus:CHARACTER:Completed&#xD;&#xA;            &#x9;&#x9;&#x9;&#x9; &#x9;Context&#xD;&#xA;&#x9;&#x9;                    &#x9;Replies --> All XML. JSON will be added inSide this Folder."/>
+      </stickyNote>
+    </stickyBoard>
+  </eClassifiers>
+</ecore:EPackage>

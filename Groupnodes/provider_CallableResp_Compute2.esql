@@ -1,0 +1,18 @@
+
+
+CREATE COMPUTE MODULE provider_CallableResp_Compute2
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		 CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		DECLARE Ref_grp REFERENCE To InputRoot.ComIbmGroupCompleteNode.Group.Replies;
+		SET OutputRoot.JSON.Data.Details.Student = Ref_grp.Student.Reply.Root.JSON.Data.Student;
+		SET OutputRoot.JSON.Data.Details.Parent = Ref_grp.Parent.Reply.Root.JSON.Data.Parent;
+		SET OutputLocalEnvironment.Destination = InputRoot.ComIbmGroupCompleteNode.Group.Context;
+	END;
+END MODULE;

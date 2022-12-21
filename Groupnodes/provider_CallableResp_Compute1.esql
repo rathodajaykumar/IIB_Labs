@@ -1,0 +1,18 @@
+
+
+CREATE COMPUTE MODULE provider_CallableResp_Compute1
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		 CALL parentDetails();
+		RETURN TRUE;
+	END;
+
+	
+	CREATE PROCEDURE parentDetails() BEGIN
+		CREATE FIELD OutputRoot.JSON.Data.Parent;
+		DECLARE outRef REFERENCE TO OutputRoot.JSON.Data.Parent;
+		SET outRef.Name = 'Krishan';
+		SET outRef.Age = '60';
+		SET outRef.Destination = 'INDIA'
+	END;
+END MODULE;
