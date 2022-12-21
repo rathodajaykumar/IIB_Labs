@@ -20,5 +20,6 @@ CREATE COMPUTE MODULE batchprocessingFlow_Compute
 
 	CREATE PROCEDURE CopyEntireMessage() BEGIN
 		SET OutputRoot.JSON.Data = InputRoot.XMLNSC;
+		----- trying to improve code
 	END;
 END MODULE;
