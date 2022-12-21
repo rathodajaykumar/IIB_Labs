@@ -13,6 +13,6 @@ CREATE COMPUTE MODULE provider_CallableResp_Compute1
 		DECLARE outRef REFERENCE TO OutputRoot.JSON.Data.Parent;
 		SET outRef.Name = 'Krishan';
 		SET outRef.Age = '60';
-		SET outRef.Destination = 'INDIA'
+		SET outRef.Destination = 'INDIA';
 	END;
 END MODULE;
