@@ -1,0 +1,111 @@
+BROKER SCHEMA shared_common
+
+           --------------log4j--------------
+           
+    CREATE FUNCTION initLog4j( IN CONFIG_FILE_NAME CHARACTER )
+    RETURNS BOOLEAN
+    LANGUAGE JAVA
+    EXTERNAL NAME "com.ibm.broker.IAM3.Log4jNode.initLog4j";
+    
+    CREATE FUNCTION log4j( IN Comp_name CHARACTER,IN logger_Name CHARACTER,
+    IN LEVEL CHARACTER,
+    IN TEXT CHARACTER)
+    RETURNS BOOLEAN
+    LANGUAGE JAVA
+    EXTERNAL NAME "com.ibm.broker.IAM3.Log4jNode.log"; 
+  
+           --------------DBlog--------------
+
+
+CREATE PROCEDURE logging(in req CHARACTER,in reqtime CHARACTER,in service CHARACTER,in res CHARACTER,in restime CHARACTER)
+	LANGUAGE DATABASE
+	EXTERNAL NAME "DBLOG";
+	
+            --------------payload--------------
+	
+	CREATE FUNCTION getpayload(in domaindata REFERENCE,in ccsid INTEGER,IN encdng INTEGER) RETURNS CHARACTER
+	BEGIN
+		DECLARE payload CHARACTER'';
+		SET payload = CAST(ASBITSTREAM(domaindata CCSID ccsid ENCODING encdng) AS CHARACTER CCSID ccsid ENCODING encdng);
+		RETURN payload;
+	END;
+	
+	
+-------------------for encryption --------------------------
+
+	CREATE PROCEDURE encrypt (IN originaltxt CHARACTER,IN key CHARACTER ) 
+    RETURNS CHARACTER
+	LANGUAGE JAVA
+	EXTERNAL NAME  "encryptionDecryption.EncryptionDecryption.encrypt";
+	/*
+	To call above procedur
+	
+		CALL encrypt(Request,privetkey) INTO enc;
+		
+		 SET OutputRoot.XMLNSC.DATA.Encrypt=enc;
+		
+	
+	*/
+------------------ for decryption-----------------------------
+
+	CREATE PROCEDURE decrypt (IN enctxt CHARACTER,IN key CHARACTER )
+	RETURNS CHARACTER
+	LANGUAGE JAVA
+	EXTERNAL NAME  "encryptionDecryption.EncryptionDecryption.decrypt";
+/*
+	To call above procedur
+	
+		
+		CALL decrypt(enc,privetkey) INTO dec;
+		
+		SET OutputRoot.XMLNSC.DATA.Decrypt=dec;
+	
+	*/
+
+	/* To create logging table
+	
+	CREATE TABLE STUDENT_MANAGEMENT_LOGGING 
+(
+  REQUESTID NUMBER(*, 0) 
+, REQUEST VARCHAR2(1000 BYTE) 
+, REQUEST_TIME VARCHAR2(50 BYTE) 
+, SERVICE_NAME VARCHAR2(30 BYTE) 
+, RESPONCE VARCHAR2(1000 BYTE) 
+, RESPONCE_TIME VARCHAR2(50 BYTE) 
+)
+
+To create sequence 
+		CREATE SEQUENCE SID INCREMENT BY 1 MAXVALUE 9999999999999999999999999999 MINVALUE 100 CACHE 20;
+		
+TO creat procedure
+		create or replace PROCEDURE DB_LOGGING 
+(
+ request IN VARCHAR2 
+, REQ_TIME IN VARCHAR2 
+, service_name IN VARCHAR2 
+, responce IN VARCHAR2 
+, res_time IN VARCHAR2 
+) AS 
+BEGIN
+  INSERT INTO STUDENT_MANAGEMENT_LOGGING VALUES(SID.nextval, request, REQ_TIME, service_name, responce, res_time);
+END DB_LOGGING;
+
+
+To call this logging procedure in any esql :
+
+path shared_common;
+
+--------To call db procedure------
+
+CALL logging(req,reqtm,ApplicationLabel,res,res_tm);
+
+--------To call log4j procedure------
+CALL initLog4j('C:\AJ\Fwd_ LOG4j\Log4jConfigurationFile.xml') INTO rc;
+CALL log4j (ApplicationLabel, 'AJ_debug', 'DEBUG','Request'||':'||VAR ) INTO rc2;
+
+--------To call payload function-----
+
+SET req = getpayload(inref,ccsid,encdng);
+		
+
+ */
